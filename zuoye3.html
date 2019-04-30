@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+    </style>
+</head>
+<body>
+	<canvas id="canvas" width="300" height="100">	</canvas>
+<script>
+        var canvas = document.getElementById("canvas");
+        var context = canvas.getContext("2d");
+        var img = new Image();
+        var imgs = [' E:/HTML5/12. 画布（三）/第12章/aa/11.png',' E:/HTML5/12. 画布（三）/第12章/aa/22.png',' E:/HTML5/12. 画布（三）/第12章/aa/22.png',' E:/HTML5/12. 画布（三）/第12章/aa/22.png',' E:/HTML5/12. 画布（三）/第12章/aa/33.png',' E:/HTML5/12. 画布（三）/第12章/aa/33.png',' E:/HTML5/12. 画布（三）/第12章/aa/33.png',' E:/HTML5/12. 画布（三）/第12章/aa/33.png',' E:/HTML5/12. 画布（三）/第12章/aa/33.png',' E:/HTML5/12. 画布（三）/第12章/aa/33.png',]; 
+        var num = Math.floor(Math.random()*10); 
+        img.src = imgs[num]; 
+        canvas.style.backgroundImage='url('+img.src+')'; 
+        img.onload = function() {
+            context.fillStyle = "gray";
+            context.fillRect(0, 0, 300, 100);
+            canvas.onmousedown=function(){
+                canvas.onmousemove=function(e){
+                    var x=e.offsetX;
+                    var y=e.offsetY; 
+                    context.beginPath(); //开始路径的绘制
+                    context.globalCompositeOperation="destination-out";
+                    context.arc(x, y, 10, 0, Math.PI * 2);               
+                    context.closePath();
+                    context.fill();
+                }
+            }
+            canvas.onmouseup=function(){
+                canvas.onmousemove=function(){
+                }
+                var n=0;
+                var imgdata=context.getImageData(0,0,300,100);
+                var pxdata=imgdata.data;
+                var len=pxdata.length;
+                for(var i=0;i<len;i+=4){
+                    var per=pxdata[i+3];
+                    if(per<10){
+                        n++;
+                    }
+                }
+                var percent=n/(len/4);
+                console.log(percent);
+                if(percent>=0.85){
+                    context.clearRect(0,0,300,100);
+                }
+            }
+        }
+
+</script>
+</body>
+</html>
